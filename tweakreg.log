@@ -1,0 +1,40 @@
+[INFO    ] Setting up logfile :  tweakreg.log
+[INFO    ] 
+[INFO    ] TweakReg Version 1.4.3(01-Jul-2016) started at: 14:14:38.918 (14/11/2017)
+[INFO    ] 
+[INFO    ] Version Information
+[INFO    ] 
+[INFO    ] --------------------
+[INFO    ] 
+[INFO    ] Python Version 2.7.13 |Continuum Analytics, Inc.| (default, Dec 20 2016, 23:05:08)
+[INFO    ] [GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.57)]
+[INFO    ] 
+[INFO    ] numpy Version -> 1.13.1 
+[INFO    ] 
+[INFO    ] astropy Version -> 2.0.2 
+[INFO    ] 
+[INFO    ] stwcs Version -> 1.3.2 
+[INFO    ] 
+[INFO    ] USER INPUT PARAMETERS common to all Processing Steps:
+[INFO    ] 	clean :	False
+[INFO    ] 	enforce_user_order :	True
+[INFO    ] 	exclusions :	
+[INFO    ] 	expand_refcat :	False
+[INFO    ] 	input :	*c0m.fits
+[INFO    ] 	interactive :	True
+[INFO    ] 	refimage :	
+[INFO    ] 	runfile :	tweakreg.log
+[INFO    ] 	updatewcs :	False
+[INFO    ] 	verbose :	False
+[INFO    ] 	writecat :	True
+[INFO    ] No filenames matching input '*c0m.fits' were found.
+[INFO    ] 
+[INFO    ] Trailer file written to:  tweakreg.log
+[INFO    ] 
+[ERROR   ] An unhandled exception ocurred:
+Traceback (most recent call last):
+  File "/Users/natalie/anaconda2/envs/iraf27/lib/python2.7/site-packages/drizzlepac/util.py", line 219, in wrapper
+    func(*args, **kwargs)
+  File "/Users/natalie/anaconda2/envs/iraf27/lib/python2.7/site-packages/drizzlepac/tweakreg.py", line 145, in run
+    raise IOError
+IOError

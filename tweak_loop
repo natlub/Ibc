@@ -1,0 +1,66 @@
+import drizzlepac
+from drizzlepac import tweakreg
+import os
+from astropy import table
+import fnmatch
+
+def tweak_loop(path, n_up, threshold_ini, threshold_gap, conv_width_ini, conv_width_gap, roundlo_val_ini, roundlo_gap, roundhi_val_ini, roundhi_gap, peakmax_val_ini, peakmax_gap):
+    
+    os.chdir(path)
+    shift_file = []
+    file_name = []
+    x_rms = []
+    y_rms = []
+    threshold = []
+    conv_width = []
+    roundlo = []
+    roundhi = []
+    peakmax = []
+
+for m in range(1, n_up, 1):                             # threshold val loop
+    threshold_val = threshold_ini+(m-1)*threshold_gap
+    for l in range(1, n_up, 1):                         # conv_width val loop
+        conv_width_val = conv_width_ini+(l-1)*conv_width_gap
+        for k in range(1, n_up, 1):                     # roundlo val loop
+            roundlo_val = roundlo_val_ini+(k-1)*roundlo_gap
+            for r in range(1, n_up, 1):                 # roundhi val loop
+                roundhi_val = roundhi_val_ini+(r-1)*roundhi_gap
+                for p in range(1, n_up, 1):             # peakmax val loop
+                    peakmax_val = peakmax_val_ini+(p-1)*peakmax_gap
+                    outshifts_val = (repr(m)+repr(l)+repr(k)+repr(r)+repr(p)+'_shift.txt') # shift file name
+                    tweakreg.TweakReg('*c0m.fits', exclusions='WFPC2_exclude.txt', updatehdr=False, shiftfile=True, outshifts=outshifts_val, residplot='No plot', see2dplot=None, use_sharp_round='Yes', threshold=threshold_val, conv_width=conv_width_val, roundlo=roundlo_val, roundhi=roundhi_val, peakmax=peakmax_val)
+
+                    shift = open(outshifts_val,"r")     # open the shift file and read parameters
+                    list = []
+                    for line in shift:
+                        list.append(line)
+                    shift.close()
+
+                        for d in range(4, len(list), 1):    # per image in stack, split the aligment parameters
+                            words = list[d].split()
+
+                            if fnmatch.fnmatch(words[1],'*n*'):     # if Nan - mark failed
+                                shift_file.append(outshifts_val)
+                                file_name.append(words[0])
+                                x_rms.append('failed')
+                                y_rms.append('failed')
+                                threshold.append(threshold_val)
+                                conv_width.append(conv_width_val)
+                                roundlo.append(roundlo_val)
+                                roundhi.append(roundhi_val)
+                                peakmax.append(peakmax_val)
+
+                            else:                                   # if succeeded - save parameters
+                                shift_file.append(outshifts_val)
+                                file_name.append(words[0])
+                                x_rms.append(words[5])
+                                y_rms.append(words[6])
+                                threshold.append(threshold_val)
+                                conv_width.append(conv_width_val)
+                                roundlo.append(roundlo_val)
+                                roundhi.append(roundhi_val)
+                                peakmax.append(peakmax_val)
+
+results = table.Table([shift_file, file_name, x_rms, y_rms, threshold, conv_width, roundlo, roundhi, peakmax], names=['shift', 'file', 'x_rms', 'y_rms', 'threshold', 'conv_width', 'roundlo', 'roundhi', 'peakmax'])
+
+return results
